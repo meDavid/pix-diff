@@ -209,20 +209,26 @@ PixDiff.prototype = {
 (function () {
     var matchers = {
         toMatch: function () {
-            var result = this.actual,
-                percent = +((result.differences / result.dimension) * 100).toFixed(2);
-            this.message = function () {
-                return util.format("Image is visibly different by %s pixels, %s %", result.differences, percent);
-            };
-            return ((result.code === BlinkDiff.RESULT_IDENTICAL) || (result.code === BlinkDiff.RESULT_SIMILAR));
+            return {
+                compare:function (actual, expected) {
+                    var result = {},
+                        percent = +((actual.differences / actual.dimension) * 100).toFixed(2);
+                    result.message = util.format("Image is visibly different by %s pixels, %s %", actual.differences, percent);
+                    result.pass = ((actual.code === BlinkDiff.RESULT_IDENTICAL) || (actual.code === BlinkDiff.RESULT_SIMILAR));
+                    return result;
+                }
+            }
         },
 
         toNotMatch: function () {
-            var result = this.actual;
-            this.message = function () {
-                return "Image is identical or near identical";
-            };
-            return ((result.code === BlinkDiff.RESULT_DIFFERENT) && (result.code !== BlinkDiff.RESULT_UNKNOWN));
+            return {
+                compare: function (actual, expected) {
+                    var result = {};
+                    result.message = "Image is identical or near identical";
+                    result.pass = ((actual.code === BlinkDiff.RESULT_DIFFERENT) && (actual.code !== BlinkDiff.RESULT_UNKNOWN));
+                    return result;
+                }
+            }
         }
     };
 
