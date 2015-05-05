@@ -16,7 +16,6 @@
         "protractor": "^1.4.0"
     },
     "scripts": {
-        "postinstall": "node node_modules/.bin/webdriver-manager update",
         "test": "node_modules/.bin/grunt"
     },
     "repository": {
